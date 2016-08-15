@@ -1,0 +1,78 @@
+%YAML 1.2
+---
+# See http://www.sublimetext.com/docs/3/syntax.html
+file_extensions:
+  - tick
+scope: source.tick
+variables:
+  chains: 'bottom|count|deadman|default|derivative|distinct|elapsed|eval|first|groupBy|httpOut|influxDBOut|join|last|max|mean|median|min|percentile|sample|shift|spread|stats|stddev|sum|top|union|where|window'
+contexts:
+  main:
+    # Strings begin and end with quotes, and use backslashes as an escape
+    # character
+    - match: '"'
+      scope: punctuation.definition.string.begin.tick
+      push: double_quoted_string
+
+    # Strings begin and end with quotes, and use backslashes as an escape
+    # character
+    - match: ''''
+      scope: punctuation.definition.string.begin.tick
+      push: single_quoted_string
+
+    # Comments begin with a '//' and finish at the end of the line
+    - match: '//'
+      scope: punctuation.definition.comment.tick
+      push: line_comment
+
+    # Namespace keywords
+    - match: '\b(batch|stream|influxql)\b'
+      scope: keyword.namespace.tick
+
+    # Numbers
+    - match: '\b(-)?[0-9.]+\b'
+      scope: constant.numeric.tick
+
+    # Query bits
+    - match: '\b(query|SELECT|FROM|WHERE|JOIN)\b'
+      scope: keyword.query.tick
+
+    # Actions
+    - match: '\balert\b'
+      scope: keyword.alertNode.tick
+      push: alert_node      
+
+  double_quoted_string:
+    - meta_scope: string.quoted.double.tick
+    - match: '\\.'
+      scope: constant.character.escape.tick
+    - match: '"'
+      scope: punctuation.definition.string.end.tick
+      pop: true
+
+  single_quoted_string:
+    - meta_scope: string.quoted.double.tick
+    - match: '\\.'
+      scope: constant.character.escape.tick
+    - match: ''''
+      scope: punctuation.definition.string.end.tick
+      pop: true
+
+  alert_node:
+    - meta_scope: alert.node
+    - match: '\b(alerta|all|crit|details|durationField|email|exec|flapping|hipChat|history|id|idField|idTag|info|levelField|levelTag|log|message|opsGenie|pagerDuty|post|sensu|slack|stateChangesOnly|talk|victorOps|warn)\b'
+      scope: keyword.alert.properties.tick
+    - match: '\b{{chains}}\b'
+
+  # query_string:
+  #   - meta_scope: string.quoted.double.tick
+  #   - match: '\\.'
+  #     scope: constant.character.escape.tick
+  #   - match: ''''
+  #     scope: punctuation.definition.string.end.tick
+  #     pop: true
+
+  line_comment:
+    - meta_scope: comment.line.tick
+    - match: $
+      pop: true

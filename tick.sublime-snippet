@@ -1,0 +1,15 @@
+<snippet>
+  <content><![CDATA[
+    |alert()
+      .id(${1:'{{ index .Tags "host" }}/{{ .Name }}'})
+      .message(${2:'{{ .ID }} is {{ .Level }}: CPU% {{ index .Fields "mean" | printf "%0.1f" }}'})
+      .warn(${3:lambda: "mean" >= 85})
+      .crit(${4:lambda: "mean" >= 95})
+      .slack()
+      .channel(${5:'#kapacitor-test'})
+]]></content>
+  <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+  <tabTrigger>slack</tabTrigger>
+  <!-- Optional: Set a scope to limit where the snippet will trigger -->
+  <scope>source.tick</scope>
+</snippet>
